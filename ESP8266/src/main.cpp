@@ -10,10 +10,8 @@
 const char* host = HOSTNAME;
 const char* ssid = STASSID;
 const char* pass = STAPSK;
-const uint16_t port = 328;
-const uint8_t reset_pin = 16;
 
-ESP8266AVRISP avrprog(port, reset_pin);
+ESP8266AVRISP avrprog(AVRISPPORT, AVRISPRESETPIN);
 
 void setup() {
   Serial.begin(115200);
@@ -29,7 +27,7 @@ void setup() {
   }
 
   MDNS.begin(host);
-  MDNS.addService("avrisp", "tcp", port);
+  MDNS.addService("avrisp", "tcp", AVRISPPORT);
 
   IPAddress local_ip = WiFi.localIP();
   Serial.print("IP address: ");
@@ -38,18 +36,18 @@ void setup() {
   Serial.print("avrdude -c arduino -p <device> -P net:");
   Serial.print(local_ip);
   Serial.print(":");
-  Serial.print(port);
+  Serial.print(AVRISPPORT);
   Serial.println(" -t # or -U ...");
 
 
   // Port defaults to 8266
-  // ArduinoOTA.setPort(8266);
+  ArduinoOTA.setPort(OTAPORT);
 
   // Hostname defaults to esp8266-[ChipID]
-  // ArduinoOTA.setHostname("myesp8266");
+  ArduinoOTA.setHostname(OTAHOSTNAME);
 
   // No authentication by default
-  // ArduinoOTA.setPassword("admin");
+  ArduinoOTA.setPassword(OTAPASSWORD);
 
   // Password can be set with it's md5 value as well
   // MD5(admin) = 21232f297a57a5a743894a0e4a801fc3
